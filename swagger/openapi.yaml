@@ -1,0 +1,134 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  title: event Repo
+servers:
+  - url: http://localhost:8080
+paths:
+  /v1/events:
+    get:
+      summary: List of events.
+      description: Returns the list of all events
+      operationId: get_events
+      tags:
+        - events
+      responses:
+        '200':
+          description: List of all events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": '#/components/schemas/event'
+    post:
+      summary: Creates a venue.
+      description: Creates a venue using given fields. If woltVenueId is given and it exists on Wolt Side, no need to provide Venue information fields. If any other field is given, that will be the one stored, dismissing the data coming from Wolt.
+      operationId: create_event
+      tags:
+        - Event
+      requestBody:
+        description: Required information to create a event
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": '#/components/schemas/eventBody'
+      responses:
+        '200':
+          description: Created event
+          content:
+            application/json:
+              schema:
+                "$ref": '#/components/schemas/event'
+        '400':
+          description: Request was wrong. Some fields in body might be missing or invalid.
+          content:
+            application/json:
+              schema:
+                "$ref": '#/components/schemas/Error'
+  /v1/events/{id}:
+    get:
+      summary: Particular event info
+      description: All the information on a single event
+      operationId: get_event
+      parameters:
+        - name: id
+          schema:
+            type: integer
+          required: true
+          in: path
+      tags:
+        - Event
+      responses:
+        '200':
+          description: A event object
+          content:
+            application/json:
+              schema:
+                "$ref": '#/components/schemas/event'
+        '404':
+          description: Provided event ID does not correspond to any object in the DB
+          content:
+            application/json:
+              schema:
+                "$ref": '#/components/schemas/Error'
+components:
+  parameters:
+    slug:
+      in: path
+      name: slug
+      schema:
+        type: string
+      required: true
+      description: Human readable id of venue
+
+  schemas:
+    Event:
+      required:
+        - id
+        - model
+        - make
+        - year
+      properties:
+        id:
+          type: integer
+          description: "Database id of the event"
+        model:
+          type: string
+        make:
+          type: string
+        year:
+          type: integer
+          description: "Year in which this model was issued"
+      example:
+        id: 3986238010
+        model: "Prius"
+        make: "Toyota"
+        year: 2011
+    eventBody:
+      required:
+        - model
+        - make
+        - year
+      properties:
+        model:
+          type: string
+        make:
+          type: string
+        year:
+          type: integer
+          description: "Year in which this model was issued"
+      example:
+        model: "Yaris"
+        make: "Toyota"
+        year: 2019
+    Error:
+      required:
+        - msg
+        - errorCode
+      properties:
+        msg:
+          type: string
+        errorCode:
+          type: integer
