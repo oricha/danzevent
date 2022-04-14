@@ -1,4 +1,4 @@
-package com.danz.danzevent.configuration.service;
+package com.danz.danzevent.service;
 
 import com.danz.danzevent.repository.common.IOperations;
 import com.google.common.collect.Lists;
