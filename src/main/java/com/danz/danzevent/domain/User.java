@@ -1,5 +1,6 @@
 package com.danz.danzevent.domain;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,16 +18,13 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event implements Serializable {
-
+public class User implements Serializable { // extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull(message = " Name cannot be null")
-    private String title;
-
-    private String address;
-    private String description;
-    private String image1;
-    private String image2;
-    }
+    private String email;
+    private String name;
+    private String password;
+    private String phone;
+}
